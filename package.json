@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "prepare": "cd .. && husky install client/.husky"
+    "prepare": "husky install .husky"
   },
   "dependencies": {
     "express": "^4.17.2",
