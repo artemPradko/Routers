@@ -1,8 +1,8 @@
 const fs = require("fs")
 const { promisify } = require("util")
 
-const mockData = require("../db/mock_data.json")
-const json = require("../db/january.json")
+// const mockData = require("../db/mock_data.json")
+// const json = require("../db/january.json")
 const { all } = require("express/lib/application")
 
 const fsReadFile = promisify(fs.readFile)
@@ -247,7 +247,7 @@ async function readCsvData(path) {
 
 //     showOldCars(mockData)
 
-//     readCsvData(`${process.cwd()}/january/mock_data.csv`)
+readCsvData(`${process.cwd()}/january/mock_data.csv`)
 // }
 
 function populateCondition(item, keys, values) {
@@ -281,7 +281,7 @@ function findParameter(entries, body) {
 
     let foundValues = []
 
-    const condition = []
+    // const condition = []
 
     // searchingKey.forEach(el => {
     //     let c =
@@ -333,7 +333,7 @@ function findParameterOnManyFiles(fileFirst, fileSecond, body) {
 
     let foundValues = []
 
-    const condition = []
+    // const condition = []
 
     console.info('Entries ---', searchingKey, searchingValue)
 
