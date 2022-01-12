@@ -1,170 +1,157 @@
-const express = require('express')
+const express = require('express');
 
-const {
-    showAllFriends,
-    showAllUsersWithTags,
-    getOldestMan,
-    showBalance,
-    findTags,
-    calculateAllUserBalance,
-    showAllUniqueTags,
-    getAllUserDescription,
-    showOldCars,
-    findParameter,
-    findParameterOnManyFiles,
-    updateDataKeys,
-    test,
-    calculateAllMockDataMoney
-} = require('./helpers/january-task')
+const rootRouter = require('./routes/rootRouter');
 
-const app = express()
+const app = express();
 
 app.use(express.json());
 
-app.get('/', function (req, res) {
-    res.send('Hello World')
-})
+app.use('/', rootRouter);
 
-app.post('/showAllFriends', async function (req, res) {
+// app.get('/', function (req, res) {
+//     res.send('Hello World')
+// })
 
-    console.info('request body---', req, req.body)
+// app.post('/showAllFriends', async function (req, res) {
 
-    const json = require("./db/january.json")
+//     console.info('request body---', req, req.body)
 
-    const data = await showAllFriends(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await showAllFriends(json)
 
-app.post('/showAllUsersWithTags', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/showAllUsersWithTags', async function (req, res) {
 
-    const data = await showAllUsersWithTags(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await showAllUsersWithTags(json)
 
-app.post('/getOldestMan', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/getOldestMan', async function (req, res) {
 
-    const data = await getOldestMan(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await getOldestMan(json)
 
-app.post('/showBalance', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/showBalance', async function (req, res) {
 
-    const data = await showBalance(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await showBalance(json)
 
-app.post('/findTags', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/findTags', async function (req, res) {
 
-    const data = await findTags(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await findTags(json)
 
-app.post('/calculateAllUserBalance', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/calculateAllUserBalance', async function (req, res) {
 
-    const data = await calculateAllUserBalance(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await calculateAllUserBalance(json)
 
-app.post('/showAllUniqueTags', async function (req, res) {
+//     res.send(data)
+// })
 
-    const json = require("./db/january.json")
+// app.post('/showAllUniqueTags', async function (req, res) {
 
-    const data = await showAllUniqueTags(json)
+//     const json = require("./db/january.json")
 
-    console.info('data ---', Array.from(data))
+//     const data = await showAllUniqueTags(json)
 
-    res.send({ data: Array.from(data) })
-})
+//     console.info('data ---', Array.from(data))
 
-app.post('/getAllUserDescription', async function (req, res) {
+//     res.send({ data: Array.from(data) })
+// })
 
-    const json = require("./db/january.json")
+// app.post('/getAllUserDescription', async function (req, res) {
 
-    const data = await getAllUserDescription(json)
+//     const json = require("./db/january.json")
 
-    res.send(data)
-})
+//     const data = await getAllUserDescription(json)
 
-app.post('/showOldCars', async function (req, res) {
+//     res.send(data)
+// })
 
-    const mockData = require("./db/mock_data.json")
+// app.post('/showOldCars', async function (req, res) {
 
-    const data = await showOldCars(mockData)
+//     const mockData = require("./db/mock_data.json")
 
-    res.send(data)
-})
+//     const data = await showOldCars(mockData)
 
-app.post('/findParameter', async function (req, res) {
+//     res.send(data)
+// })
 
-    console.info('request body---', req, req.body)
+// app.post('/findParameter', async function (req, res) {
 
-    const json = require("./db/january.json")
+//     console.info('request body---', req, req.body)
 
-    const data = await findParameter(json, req.body)
+//     const json = require("./db/january.json")
 
-    // console.info('data ---', data)
+//     const data = await findParameter(json, req.body)
 
-    res.send(data)
-})
+//     console.info('data ---', data)
 
-app.post('/findParameterOnManyFiles', async function (req, res) {
+//     res.send(data)
+// })
 
-    console.info('request body---', req, req.body)
+// app.post('/findParameterOnManyFiles', async function (req, res) {
 
-    const json = require("./db/january.json")
-    const mockData = require("./db/mock_data.json")
+//     console.info('request body---', req, req.body)
 
-    const data = await findParameterOnManyFiles(json, mockData, req.body)
+//     const json = require("./db/january.json")
+//     const mockData = require("./db/mock_data.json")
 
-    res.send(data)
-})
+//     const data = await findParameterOnManyFiles(json, mockData, req.body)
 
-app.post('/withUpdatedKeys', async function (req, res) {
+//     res.send(data)
+// })
 
-    const mockData = require("./db/mock_data.json")
+// app.post('/withUpdatedKeys', async function (req, res) {
 
-    const data = await updateDataKeys(mockData)
+//     const mockData = require("./db/mock_data.json")
 
-    res.send(data)
-})
+//     const data = await updateDataKeys(mockData)
 
-app.post('/cardJcb', async function (req, res) {
+//     res.send(data)
+// })
 
-    const mockData = require("./db/mock_data.json")
+// app.post('/cardJcb', async function (req, res) {
 
-    const data = await test(mockData)
+//     const mockData = require("./db/mock_data.json")
 
-    res.send(data)
-})
+//     const data = await test(mockData)
 
-app.post('/mockDataMoney', async function (req, res) {
+//     res.send(data)
+// })
 
-    const mockData = require("./db/mock_data.json")
+// app.post('/mockDataMoney', async function (req, res) {
 
-    const data = await calculateAllMockDataMoney(mockData)
+//     const mockData = require("./db/mock_data.json")
 
-    // res.sendStatus(200).send(data)
-    console.info('data --', data)
-    res.json(data)
-    // res.send(data)
-})
+//     const data = await calculateAllMockDataMoney(mockData)
+
+//     // res.sendStatus(200).send(data)
+//     console.info('data --', data)
+//     res.json(data)
+//     // res.send(data)
+// })
 
 app.listen(3000, () => {
-    console.info('server listen on port 3000')
-})
+  console.info('server listen on port 3000');
+});
