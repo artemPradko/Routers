@@ -108,7 +108,7 @@ async function cardJcb(req, res) {
 async function calculateMockDataMoney(req, res) {
   const data = await calculateAllMockDataMoney(mockData);
 
-  console.info('data --', data);
+  // console.info('data --', data);
 
   res.json(data);
 }

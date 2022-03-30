@@ -1,157 +1,46 @@
 const express = require('express');
+const { config } = require('dotenv');
+const mongoose = require('mongoose');
 
+const cors = require('cors');
+
+const { config: appConfig } = require('./config/index');
 const rootRouter = require('./routes/rootRouter');
+const accessTokenMiddleware = require('./middlewares/accessTokenMiddleware');
 
-const app = express();
+config();
 
-app.use(express.json());
+function main() {
+  const app = express();
+  const corsOptions = {
+    origin: '*',
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200
+  };
 
-app.use('/', rootRouter);
+  app.use(cors(corsOptions)); // Use this after the variable declaration
 
-// app.get('/', function (req, res) {
-//     res.send('Hello World')
-// })
+  app.use(express.json());
 
-// app.post('/showAllFriends', async function (req, res) {
+  mongoose.connect(appConfig.database, { useNewUrlParser: true }).catch((e) => {
+    console.error('Connection error', e.message);
+  });
 
-//     console.info('request body---', req, req.body)
+  const db = mongoose.connection;
 
-//     const json = require("./db/january.json")
+  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-//     const data = await showAllFriends(json)
+  // app.use(accessTokenMiddleware);
 
-//     res.send(data)
-// })
+  app.use('/', rootRouter);
 
-// app.post('/showAllUsersWithTags', async function (req, res) {
+  const port = process.env.PORT;
 
-//     const json = require("./db/january.json")
+  console.info('port --', port);
 
-//     const data = await showAllUsersWithTags(json)
+  app.listen(port, () => {
+    console.info('server listen on port', port);
+  });
+}
 
-//     res.send(data)
-// })
-
-// app.post('/getOldestMan', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await getOldestMan(json)
-
-//     res.send(data)
-// })
-
-// app.post('/showBalance', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await showBalance(json)
-
-//     res.send(data)
-// })
-
-// app.post('/findTags', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await findTags(json)
-
-//     res.send(data)
-// })
-
-// app.post('/calculateAllUserBalance', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await calculateAllUserBalance(json)
-
-//     res.send(data)
-// })
-
-// app.post('/showAllUniqueTags', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await showAllUniqueTags(json)
-
-//     console.info('data ---', Array.from(data))
-
-//     res.send({ data: Array.from(data) })
-// })
-
-// app.post('/getAllUserDescription', async function (req, res) {
-
-//     const json = require("./db/january.json")
-
-//     const data = await getAllUserDescription(json)
-
-//     res.send(data)
-// })
-
-// app.post('/showOldCars', async function (req, res) {
-
-//     const mockData = require("./db/mock_data.json")
-
-//     const data = await showOldCars(mockData)
-
-//     res.send(data)
-// })
-
-// app.post('/findParameter', async function (req, res) {
-
-//     console.info('request body---', req, req.body)
-
-//     const json = require("./db/january.json")
-
-//     const data = await findParameter(json, req.body)
-
-//     console.info('data ---', data)
-
-//     res.send(data)
-// })
-
-// app.post('/findParameterOnManyFiles', async function (req, res) {
-
-//     console.info('request body---', req, req.body)
-
-//     const json = require("./db/january.json")
-//     const mockData = require("./db/mock_data.json")
-
-//     const data = await findParameterOnManyFiles(json, mockData, req.body)
-
-//     res.send(data)
-// })
-
-// app.post('/withUpdatedKeys', async function (req, res) {
-
-//     const mockData = require("./db/mock_data.json")
-
-//     const data = await updateDataKeys(mockData)
-
-//     res.send(data)
-// })
-
-// app.post('/cardJcb', async function (req, res) {
-
-//     const mockData = require("./db/mock_data.json")
-
-//     const data = await test(mockData)
-
-//     res.send(data)
-// })
-
-// app.post('/mockDataMoney', async function (req, res) {
-
-//     const mockData = require("./db/mock_data.json")
-
-//     const data = await calculateAllMockDataMoney(mockData)
-
-//     // res.sendStatus(200).send(data)
-//     console.info('data --', data)
-//     res.json(data)
-//     // res.send(data)
-// })
-
-app.listen(3000, () => {
-  console.info('server listen on port 3000');
-});
+main();
