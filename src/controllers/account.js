@@ -49,8 +49,9 @@ class AccountController {
   }
 
   static async changeEmail(req, res) {
-    const { newEmail } = req.body;
-    const userId = mongoose.Types.ObjectId(req.query.id);
+    const { newEmail, accessToken } = req.body;
+    const accessTokenData = verifyJWT(accessToken);
+    const userId = mongoose.Types.ObjectId(accessTokenData.userId);
 
     if (!userId) {
       return res.status(404).json({
@@ -61,16 +62,10 @@ class AccountController {
 
     try {
       const exitsUser = await UserService.findByEmail(newEmail);
-      const user = await UserService.findById(
-        mongoose.Types.ObjectId(req.query.id)
-      );
 
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          error: 'User not found!'
-        });
-      }
+      const user = await UserService.findById(
+        mongoose.Types.ObjectId(accessTokenData.userId)
+      );
 
       if (exitsUser) {
         return res.status(422).json({
@@ -80,7 +75,7 @@ class AccountController {
 
       const emailConfirmToken = createJWT(
         newEmail,
-        mongoose.Types.ObjectId(req.query.id),
+        mongoose.Types.ObjectId(accessTokenData.userId),
         3600
       );
       user.emailConfirmToken = '';
@@ -95,7 +90,8 @@ class AccountController {
       );
 
       return res.status(200).json({
-        success: true
+        success: true,
+        data: 'Email changed'
       });
     } catch (err) {
       console.log(err);
@@ -104,7 +100,7 @@ class AccountController {
   }
 
   static async confirmEmail(req, res) {
-    const { emailConfirmToken } = req.query;
+    const { emailConfirmToken } = req.body;
 
     try {
       const tokenData = verifyJWT(emailConfirmToken);
@@ -149,7 +145,9 @@ class AccountController {
   }
 
   static async cancelEmailChanging(req, res) {
-    const userId = mongoose.Types.ObjectId(req.query.id);
+    const { accessToken } = req.body;
+    const accessTokenData = verifyJWT(accessToken);
+    const userId = mongoose.Types.ObjectId(accessTokenData.userId);
 
     if (!userId) {
       return res.status(404).json({
@@ -160,15 +158,8 @@ class AccountController {
 
     try {
       const user = await UserService.findById(
-        mongoose.Types.ObjectId(req.query.id)
+        mongoose.Types.ObjectId(accessTokenData.userId)
       );
-
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          error: 'User not found!'
-        });
-      }
 
       user.newEmail = null;
       user.emailConfirmToken = null;
@@ -183,7 +174,8 @@ class AccountController {
   }
 
   static async resendConfirmNewEmailToken(req, res) {
-    const { email } = req.body;
+    const { email, accessToken } = req.body;
+    const accessTokenData = verifyJWT(accessToken);
 
     try {
       const user = await UserService.findByEmail(email);

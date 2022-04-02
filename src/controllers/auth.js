@@ -213,7 +213,7 @@ class AuthController {
 
       return res.status(200).json({
         success: true,
-        message: 'sent confirm token'
+        message: 'Confirm that is your email'
       });
     } catch (err) {
       res.status(500).json({ errors: err });
